@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+
+<article class="full-post">
+  <header class="post-header">
+    <h1><%= post.title %></h1>
+    <div class="post-meta">Published recently</div>
+  </header>
+  
+  <div class="post-body">
+    <p><%= post.content %></p>
+  </div>
+  
+  <hr>
+  <a href="/" class="btn-secondary">← Back to Home</a>
+</article>
+
+<%- include('partials/footer') %>

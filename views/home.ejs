@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+
+<h1>Latest Stories</h1>
+<ul class="post-list">
+  <% posts.forEach((post, index) => { %>
+    <li class="post-item">
+      <a href="/posts/<%= index %>" class="post-link"> <%= post.title %> </a>
+      <form action="/delete" method="POST">
+        <input type="hidden" name="postIndex" value="<%= index %>">
+        <button type="submit" class="btn-delete">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+<%- include('partials/footer') %>

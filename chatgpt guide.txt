@@ -1,0 +1,125 @@
+That is a fantastic roadmap! Transitioning from tutorials to building a functional CRUD (Create, Read, Update, Delete) application is the best way to make those concepts "stick."
+
+Since you want to use your existing stack (Node, Express, EJS), we will build this using a **Server-Side Rendering** approach.
+
+### 1. Project Initialization
+
+First, set up your environment and install the necessary "ingredients."
+
+1. **Create a folder:** `mkdir my-blog && cd my-blog`
+2. **Initialize NPM:** `npm init -y`
+3. **Install dependencies:** `npm install express ejs body-parser`
+4. **Folder Structure:** Create a folder named `views` (for your EJS files) and a folder named `public` (for your CSS).
+
+---
+
+### 2. The App Architecture
+
+Before coding, understand how the data flows. Since we are keeping it simple, we will store the blog posts in a **Local Array** (a variable) instead of a database for now.
+
+---
+
+### 3. Part 1: Setting up the Server (`app.js`)
+
+Create an `app.js` file. This is the "brain" of your blog.
+
+```javascript
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"));
+
+// This is your temporary "Database"
+let posts = [];
+
+app.get("/", (req, res) => {
+  res.render("home", { posts: posts });
+});
+
+app.listen(3000, () => {
+  console.log("Server started on port 3000");
+});
+
+```
+
+---
+
+### 4. Part 2: The View Layer (EJS)
+
+Inside your `views` folder, create `home.ejs`. This will loop through your array and display the titles.
+
+```html
+<h1>My Blog</h1>
+<a href="/compose">Write a New Post</a>
+
+<ul>
+  <% posts.forEach((post, index) => { %>
+    <li>
+      <a href="/posts/<%= index %>"> <%= post.title %> </a>
+      <form action="/delete" method="POST" style="display:inline;">
+        <input type="hidden" name="postIndex" value="<%= index %>">
+        <button type="submit">Delete</button>
+      </form>
+    </li>
+  <% }) %>
+</ul>
+
+```
+
+---
+
+### 5. Part 3: Creating Content (The "C" in CRUD)
+
+You need a page to type your blog and a route to save it.
+
+1. **The Route:** In `app.js`, add a GET route to show the form and a POST route to catch the data.
+```javascript
+app.get("/compose", (req, res) => {
+  res.render("compose");
+});
+
+app.post("/compose", (req, res) => {
+  const post = {
+    title: req.body.postTitle,
+    content: req.body.postContent
+  };
+  posts.push(post);
+  res.redirect("/");
+});
+
+```
+
+
+2. **The Form:** Create `compose.ejs` with an `<input>` for the title and a `<textarea>` for the content.
+
+---
+
+### 6. Part 4: Viewing and Deleting (The "R" and "D")
+
+* **Viewing:** Use **Route Parameters** (e.g., `/posts/:id`) to find a specific post in your array using its index and render it on a `post.ejs` page.
+* **Deleting:** The form we added in `home.ejs` sends the index of the post. In `app.js`, use `.splice()` to remove that item from the `posts` array.
+
+```javascript
+app.post("/delete", (req, res) => {
+  const index = req.body.postIndex;
+  posts.splice(index, 1);
+  res.redirect("/");
+});
+
+```
+
+---
+
+### Why this works for you:
+
+* **HTML/CSS:** You'll use this in your EJS files to make the blog look pretty.
+* **Basic JS:** You're using arrays and objects to manage data.
+* **Node/Express:** Handling the server logic and routing.
+* **EJS:** Dynamically injecting your JS array into the HTML.
+
+**Important Note:** Because we are using an array, your posts will disappear every time you restart the server. That is normal for this stage!
+
+**Would you like me to provide the full code for the `post.ejs` page so you can see how to display the full article content?**

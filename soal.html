@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>English Quiz Kindergarten</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f8ff;
+        padding: 20px;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    .question {
+        background: white;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 10px;
+        box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .question p {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    label {
+        display: block;
+        margin: 5px 0;
+        cursor: pointer;
+    }
+    .correct {
+        color: green;
+        font-weight: bold;
+        margin-top: 5px;
+    }
+    #result {
+        text-align: center;
+        font-size: 22px;
+        font-weight: bold;
+        margin-top: 30px;
+        color: #006400;
+    }
+</style>
+</head>
+<body>
+
+<h1>English Quiz for Kindergarten</h1>
+
+<div id="quiz"></div>
+
+<div id="result"></div>
+
+<script>
+const questions = [
+    { q: "1. What color is the sun?", o: ["Red", "Blue", "Yellow"], a: 2 },
+    { q: "2. Cat says?", o: ["Woof", "Meow", "Moo"], a: 1 },
+    { q: "3. Which one is a fruit?", o: ["Apple", "Car", "Chair"], a: 0 },
+    { q: "4. How many legs does a dog have?", o: ["2", "4", "6"], a: 1 },
+    { q: "5. What shape is a ball?", o: ["Square", "Circle", "Triangle"], a: 1 },
+    { q: "6. What animal says moo?", o: ["Cow", "Cat", "Dog"], a: 0 },
+    { q: "7. Which one can fly?", o: ["Bird", "Fish", "Cat"], a: 0 },
+    { q: "8. What color is grass?", o: ["Green", "Black", "Pink"], a: 0 },
+    { q: "9. Which one is big?", o: ["Elephant", "Ant", "Bee"], a: 0 },
+    { q: "10. What do we drink?", o: ["Water", "Stone", "Book"], a: 0 },
+    { q: "11. Which is a number?", o: ["Apple", "Two", "Dog"], a: 1 },
+    { q: "12. What do we wear on feet?", o: ["Hat", "Shoes", "Gloves"], a: 1 },
+    { q: "13. Which one is hot?", o: ["Ice", "Fire", "Snow"], a: 1 },
+    { q: "14. What do bees make?", o: ["Milk", "Honey", "Juice"], a: 1 },
+    { q: "15. Which one is a color?", o: ["Run", "Blue", "Jump"], a: 1 }
+];
+
+let score = 0;
+let answered = Array(questions.length).fill(false);
+
+const quizDiv = document.getElementById("quiz");
+
+questions.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "question";
+
+    let html = `<p>${q.q}</p>`;
+    q.o.forEach((opt, idx) => {
+        html += `
+        <label>
+            <input type="radio" name="q${i}" 
+            onclick="checkAnswer(${i}, ${idx})">
+            ${opt}
+        </label>`;
+    });
+
+    html += `<div id="correct${i}" class="correct" style="display:none;">
+             Correct answer: ${q.o[q.a]}</div>`;
+
+    div.innerHTML = html;
+    quizDiv.appendChild(div);
+});
+
+function checkAnswer(qIndex, selected) {
+    document.getElementById("correct" + qIndex).style.display = "block";
+
+    // Nilai hanya dihitung sekali (jawaban pertama)
+    if (!answered[qIndex]) {
+        answered[qIndex] = true;
+        if (selected === questions[qIndex].a) {
+            score++;
+        }
+    }
+
+    // Jika semua soal sudah dijawab minimal 1x
+    if (answered.every(a => a)) {
+        document.getElementById("result").innerHTML =
+            `Final Score: ${score} / ${questions.length}`;
+    }
+}
+</script>
+
+</body>
+</html>
